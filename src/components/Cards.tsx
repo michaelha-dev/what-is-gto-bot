@@ -2,10 +2,11 @@ import { Card } from "../types/types";
 
 interface Props {
   card?: Card;
+  isFaceDown?: boolean;
 }
 
 export default function CardView(props: Props) {
-  if (!props.card) {
+  if (!props.card || props.isFaceDown) {
     return <div className="card">🂠</div>;
   }
 

@@ -35,3 +35,17 @@ export function startNewHand(game: GameState) {
 
     return game;
 }
+
+export function nextPlayer(game: GameState) {
+    game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
+    return game;
+}
+
+export function isBettingRoundComplete(game: GameState) {
+    for (const player of game.players) {
+        if (player.status === "active" && !player.hasActed) {
+            return false;
+        }
+    }
+    return true;
+}

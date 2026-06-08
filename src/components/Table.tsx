@@ -10,16 +10,31 @@ export default function Table() {
         chips: 1000,
     } as Player;
 
+    const botPlayer = {
+        id: "player2",
+        name: "Bob",
+        chips: 1000,
+        isBot: true,
+    } as Player;
+
     const newGameState = createNewGame();
     newGameState.players.push(newPlayer);
+    newGameState.players.push(botPlayer);
     const newHandState = startNewHand(newGameState);
 
     return (
         <>
             {newHandState.players.map((player) => (
-                player.holeCards.map((card) => (
-                    <CardView card={card} />
-                ))
+                <>
+                <div>player: {player.name}</div>
+                {
+                    player.holeCards.map((card) => (
+                        <CardView card={card} isFaceDown={player.isBot} />
+                    ))
+                }
+                <div>chips: {player.chips}</div>
+                </>
+                
             ))}
         </>
     );
