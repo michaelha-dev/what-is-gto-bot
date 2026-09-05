@@ -1,0 +1,7 @@
+The main logic of the game is in the poker folder. It is structured as follows:
+
+gameState.ts       ← creating/resetting state
+pokerEngine.ts     ← poker rules/actions
+deck.ts            ← deck/shuffling
+betting.ts         ← betting-round logic
+handEvaluator.ts   ← who won?

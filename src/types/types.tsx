@@ -32,12 +32,19 @@ export type GameState = {
   deck: Card[];
   communityCards: Card[];
   pot: number;
+
   currentPlayerIndex: number;
+
   dealerIndex: number;
   smallBlindIndex: number;
   bigBlindIndex: number;
+
+  smallBlind: number;
+  bigBlind: number;
+
   currentBet: number;
   minimumRaise: number;
+
   round: BettingRound;
   log: string[];
 };

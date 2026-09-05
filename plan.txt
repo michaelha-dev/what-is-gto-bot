@@ -1,6 +1,6 @@
 random bot - call fold raise randomly
-slightly smarter - give it a range and make it understand hand strangth will probably be deterministic
-monte carlo - simulate some number of hands and let work out equity, action based on that equity will also be deterministic
+slightly smarter - give it a range and make it understand hand strength will probably be deterministic
+monte carlo - simulates some number of hands and lets it work out equity, action based on that equity will also be deterministic
 mini max bot (assuming i make this project heads up only) - use mini max to simulate both hands, will have to use some range stuff. time complexity go brrr
 maybe try doing deep learning
 combine all 4 to make a good bot hopefully

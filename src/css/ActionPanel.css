@@ -1,0 +1,50 @@
+.action-panel {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-panel button {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fold-button {
+  background: #d9534f;
+  color: white;
+}
+
+.check-button {
+  background: #5cb85c;
+  color: white;
+}
+
+.call-button {
+  background: #337ab7;
+  color: white;
+}
+
+.raise-button {
+  background: #f0ad4e;
+  color: white;
+}
+
+.raise-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.raise-container input {
+  width: 150px;
+}
