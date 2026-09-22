@@ -214,3 +214,22 @@
 
     background: #ef4444;
 }
+
+.community-cards {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.community-card-slot {
+    width: 70px;
+    height: 100px;
+}
+
+.empty-card-slot {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    box-sizing: border-box;
+}

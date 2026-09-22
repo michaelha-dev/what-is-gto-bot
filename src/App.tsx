@@ -1,92 +1,101 @@
-import { useState } from "react";
-import ActionPanel from "./components/ActionPanel";
+import { useEffect, useState } from "react";
+
 import Table from "./components/Table";
-import { createNewGame, startNewHand } from "./poker/gamestate";
-import { applyAction } from "./poker/pokerEngine";
-import { GameState, PlayerAction } from "./types/types";
+import ActionPanel from "./components/ActionPanel";
 
-function createInitialGame(): GameState {
+import type { GameState, PlayerAction } from "./types/types";
 
-    const game = createNewGame();
-
-    game.players.push(
-        {
-            id: "player1",
-            name: "Alice",
-            chips: 1000,
-            holeCards: [],
-            currentBet: 0,
-            hasActed: false,
-            status: "active",
-            isBot: false,
-        },
-        {
-            id: "player2",
-            name: "Bob",
-            chips: 1000,
-            holeCards: [],
-            currentBet: 0,
-            hasActed: false,
-            status: "active",
-            isBot: true,
-        }
-    );
-
-    return startNewHand(game);
-}
+import { getGame, sendAction } from "./api/gameApi";
 
 function App() {
+    const [game, setGame] = useState<GameState | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    const [game, setGame] = useState(createInitialGame());
+    const localPlayerId = "alice";
 
-    const handleAction = (action: PlayerAction) => {
+    useEffect(() => {
+        loadGame();
+    }, []);
 
-        setGame(currentGame =>
-            applyAction(currentGame, action)
-        );
-
-    };
-
-    const currentPlayer =
-        game.players[game.currentPlayerIndex];
-
-    if (!currentPlayer) {
-        return <p>No players in the game.</p>;
+    async function loadGame() {
+        try {
+            const gameState = await getGame();
+            setGame(gameState);
+        } catch (error) {
+            setError(String(error));
+        }
     }
 
-    const callAmount =
-        game.currentBet - currentPlayer.currentBet;
+    async function handleAction(action: PlayerAction) {
+        try {
+            setError(null);
 
-    const canCheck =
-        callAmount === 0;
+            const updatedGame = await sendAction(action);
 
-    const minRaise =
+            setGame(updatedGame);
+        } catch (error) {
+            setError(String(error));
+        }
+    }
+
+    if (error) {
+        return (
+            <div>
+                <h2>Something went wrong</h2>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
+    if (!game) {
+        return <div>Loading game...</div>;
+    }
+
+    const currentPlayer = game.players[game.currentPlayerIndex];
+
+    if (!currentPlayer) {
+        return <div>No current player</div>;
+    }
+
+    const callAmount = Math.max(
+        0,
+        game.currentBet - currentPlayer.currentBet
+    );
+
+    const canCheck = callAmount === 0;
+
+    const minimumRaiseTo =
         game.currentBet + game.minimumRaise;
 
-    const maxRaise =
+    const maximumRaiseTo =
         currentPlayer.currentBet + currentPlayer.chips;
 
     const canRaise =
-        currentPlayer.chips > 0 &&
-        maxRaise >= minRaise;
-
-    const localPlayerId = "player1";
+        currentPlayer.status === "active" &&
+        maximumRaiseTo >= minimumRaiseTo;
 
     return (
-        <main>
-
-            <Table game={game} localPlayerId={localPlayerId} />
-
-            <ActionPanel
-                callAmount={callAmount}
-                minRaise={minRaise}
-                maxRaise={maxRaise}
-                canCheck={canCheck}
-                canRaise={canRaise}
-                onAction={handleAction}
+        <div className="app">
+            <Table
+                game={game}
+                localPlayerId={currentPlayer.id}
             />
 
-        </main>
+
+            <div className="turn-indicator">
+                {currentPlayer.name}'s turn
+            </div>
+            {currentPlayer.status === "active" && (
+                <ActionPanel
+                    callAmount={callAmount}
+                    minRaise={minimumRaiseTo}
+                    maxRaise={maximumRaiseTo}
+                    canCheck={canCheck}
+                    canRaise={canRaise}
+                    onAction={handleAction}
+                />
+            )}
+        </div>
     );
 }
 

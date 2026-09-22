@@ -40,11 +40,44 @@
 }
 
 .raise-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.raise-container input {
-  width: 150px;
+.raise-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.raise-controls {
+    display: flex;
+    align-items: center;
+}
+
+.raise-adjust-button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.raise-input {
+    width: 80px;
+    height: 36px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    outline: none;
+}
+
+.raise-button {
+    height: 36px;
+    padding: 0 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
 }

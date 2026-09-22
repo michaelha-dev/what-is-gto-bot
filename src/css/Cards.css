@@ -1,0 +1,12 @@
+.playing-card {
+    width: 70px;
+    height: 100px;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}
+
+.community-cards .playing-card {
+    width: 80px;
+    height: 115px;
+}

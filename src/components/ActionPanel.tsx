@@ -12,84 +12,122 @@ type ActionPanelProps = {
 };
 
 function ActionPanel({
-  callAmount,
-  minRaise,
-  maxRaise,
-  canCheck,
-  canRaise,
-  onAction,
+    callAmount,
+    minRaise,
+    maxRaise,
+    canCheck,
+    canRaise,
+    onAction,
 }: ActionPanelProps) {
+    const [raiseAmount, setRaiseAmount] = useState(minRaise);
 
-  const [raiseAmount, setRaiseAmount] = useState(minRaise);
+    const gameIncrement = 10;
 
-  useEffect(() => {
-    setRaiseAmount(minRaise);
-  }, [minRaise]);
+    useEffect(() => {
+        setRaiseAmount(minRaise);
+    }, [minRaise]);
 
-  const handleRaise = () => {
-    onAction({
-      type: "raise",
-      amount: raiseAmount,
-    });
-  };
+    const handleRaise = () => {
+        const amount = Math.min(
+            maxRaise,
+            Math.max(minRaise, raiseAmount)
+        );
 
-  return (
-    <div className="action-panel">
-      <div className="action-buttons">
+        onAction({
+            type: "raise",
+            amount,
+        });
+    };
 
-        <button
-          className="fold-button"
-          onClick={() => onAction({ type: "fold" })}
-        >
-          Fold
-        </button>
+    const decreaseRaise = () => {
+        setRaiseAmount((current) =>
+            Math.max(minRaise, current - gameIncrement)
+        );
+    };
 
-        {canCheck ? (
-          <button
-            className="check-button"
-            onClick={() => onAction({ type: "check" })}
-          >
-            Check
-          </button>
-        ) : (
-          <button
-            className="call-button"
-            onClick={() => onAction({ type: "call" })}
-          >
-            Call {callAmount}
-          </button>
-        )}
+    const increaseRaise = () => {
+        setRaiseAmount((current) =>
+            Math.min(maxRaise, current + gameIncrement)
+        );
+    };
 
-        {canRaise && (
-          <div className="raise-container">
+    return (
+        <div className="action-panel">
+            <div className="action-buttons">
 
-            <input
-              type="range"
-              min={minRaise}
-              max={maxRaise}
-              value={raiseAmount}
-              onChange={(e) =>
-                setRaiseAmount(Number(e.target.value))
-              }
-            />
+                <button
+                    className="fold-button"
+                    onClick={() => onAction({ type: "fold" })}
+                >
+                    Fold
+                </button>
 
-            <span>
-              Raise to {raiseAmount}
-            </span>
+                {canCheck ? (
+                    <button
+                        className="check-button"
+                        onClick={() => onAction({ type: "check" })}
+                    >
+                        Check
+                    </button>
+                ) : (
+                    <button
+                        className="call-button"
+                        onClick={() => onAction({ type: "call" })}
+                    >
+                        Call {callAmount}
+                    </button>
+                )}
 
-            <button
-              className="raise-button"
-              onClick={handleRaise}
-            >
-              Raise
-            </button>
+                {canRaise && (
+                    <div className="raise-container">
+                        <span className="raise-label">
+                            Raise to
+                        </span>
 
-          </div>
-        )}
+                        <div className="raise-controls">
+                            <button
+                                type="button"
+                                className="raise-adjust-button"
+                                onClick={decreaseRaise}
+                            >
+                                −
+                            </button>
 
-      </div>
-    </div>
-  );
+                            <input
+                                type="number"
+                                min={minRaise}
+                                max={maxRaise}
+                                value={raiseAmount}
+                                onChange={(e) => {
+                                    const value = Number(e.target.value);
+
+                                    if (!Number.isNaN(value)) {
+                                        setRaiseAmount(value);
+                                    }
+                                }}
+                                className="raise-input"
+                            />
+
+                            <button
+                                type="button"
+                                className="raise-adjust-button"
+                                onClick={increaseRaise}
+                            >
+                                +
+                            </button>
+                        </div>
+
+                        <button
+                            className="raise-button"
+                            onClick={handleRaise}
+                        >
+                            Raise
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default ActionPanel;

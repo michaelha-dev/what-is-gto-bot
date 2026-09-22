@@ -28,25 +28,25 @@ export type Player = {
 export type BettingRound = "preflop" | "flop" | "turn" | "river" | "showdown";
 
 export type GameState = {
-  players: Player[];
-  deck: Card[];
-  communityCards: Card[];
-  pot: number;
+    players: Player[];
+    deck: Card[];
+    communityCards: Card[];
+    pot: number;
 
-  currentPlayerIndex: number;
+    currentPlayerIndex: number;
+    dealerIndex: number;
 
-  dealerIndex: number;
-  smallBlindIndex: number;
-  bigBlindIndex: number;
+    smallBlind: number;
+    bigBlind: number;
 
-  smallBlind: number;
-  bigBlind: number;
+    smallBlindIndex: number;
+    bigBlindIndex: number;
 
-  currentBet: number;
-  minimumRaise: number;
+    currentBet: number;
+    minimumRaise: number;
 
-  round: BettingRound;
-  log: string[];
+    round: BettingRound;
+    log: string[];
 };
 
 export type PlayerAction =

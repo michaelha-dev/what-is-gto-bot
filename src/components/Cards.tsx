@@ -1,18 +1,62 @@
-import { Card } from "../types/types";
+import type { Card } from "../types/types";
+import "../css/Cards.css";
 
-interface Props {
-  card?: Card;
-  isFaceDown?: boolean;
+const cardImages = import.meta.glob(
+    "../assets/cards/*.svg",
+    {
+        eager: true,
+        query: "?url",
+        import: "default",
+    }
+) as Record<string, string>;
+
+function getCardImage(card: Card): string {
+    const suitMap = {
+        diamonds: "D",
+        hearts: "H",
+        clubs: "C",
+        spades: "S",
+    };
+
+    // Convert TypeScript rank to the filename convention
+    const rankMap = {
+        "10": "T",
+        "J": "J",
+        "Q": "Q",
+        "K": "K",
+        "A": "A",
+    };
+
+    const filenameRank =
+        rankMap[card.rank as keyof typeof rankMap] ?? card.rank;
+
+    const filename = `${filenameRank}${suitMap[card.suit]}.svg`;
+
+    const imagePath = Object.keys(cardImages).find(
+        (path) => path.endsWith(`/${filename}`)
+    );
+
+    if (!imagePath) {
+        throw new Error(`Card image not found: ${filename}`);
+    }
+
+    return cardImages[imagePath];
 }
 
-export default function CardView(props: Props) {
-  if (!props.card || props.isFaceDown) {
-    return <div className="card">🂠</div>;
-  }
+type CardViewProps = {
+    card: Card;
+};
 
-  return (
-    <div className="card">
-      {props.card.rank}{props.card.suit}
-    </div>
-  );
+function CardView({ card }: CardViewProps) {
+    const image = getCardImage(card);
+
+    return (
+        <img
+            src={image}
+            alt={`${card.rank} of ${card.suit}`}
+            className="playing-card"
+        />
+    );
 }
+
+export default CardView;

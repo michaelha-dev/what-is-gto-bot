@@ -46,13 +46,15 @@ export default function Table({
                 <div className="community-area">
 
                     <div className="community-cards">
-                        {game.communityCards.map((card, index) => (
-                            <CardView
-                                key={index}
-                                card={card}
-                                isFaceDown={false}
-                            />
-                        ))}
+                        {Array.from({ length: 5 }).map((_, index) => {
+                            const card = game.communityCards[index];
+
+                            return (
+                                <div className="community-card-slot" key={index}>
+                                    {card && <CardView card={card} />}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <div className="pot-display">
@@ -117,9 +119,6 @@ export default function Table({
                                             <CardView
                                                 key={cardIndex}
                                                 card={card}
-                                                isFaceDown={
-                                                    player.isBot
-                                                }
                                             />
                                         )
                                     )}
